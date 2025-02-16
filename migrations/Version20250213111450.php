@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250211215944 extends AbstractMigration
+final class Version20250213111450 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -23,8 +23,10 @@ final class Version20250211215944 extends AbstractMigration
         $this->addSql('CREATE TABLE activite (id INT AUTO_INCREMENT NOT NULL, titre VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE activite_patient (activite_id INT NOT NULL, patient_id INT NOT NULL, INDEX IDX_507C106E9B0F88B1 (activite_id), INDEX IDX_507C106E6B899279 (patient_id), PRIMARY KEY(activite_id, patient_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE administrateur (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE commande (id INT AUTO_INCREMENT NOT NULL, date_commande DATETIME NOT NULL, montant_total DOUBLE PRECISION NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE exercice (id INT AUTO_INCREMENT NOT NULL, titre VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE exercice_patient (exercice_id INT NOT NULL, patient_id INT NOT NULL, INDEX IDX_E761A14689D40298 (exercice_id), INDEX IDX_E761A1466B899279 (patient_id), PRIMARY KEY(exercice_id, patient_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE ligne_commande (id INT AUTO_INCREMENT NOT NULL, commande_id INT NOT NULL, quantite INT NOT NULL, prix_unitaire DOUBLE PRECISION NOT NULL, INDEX IDX_3170B74B82EA2E54 (commande_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE patient (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE question (id INT AUTO_INCREMENT NOT NULL, patient_id INT NOT NULL, contenu VARCHAR(255) NOT NULL, INDEX IDX_B6F7494E6B899279 (patient_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE reponse (id INT AUTO_INCREMENT NOT NULL, administrateur_id INT DEFAULT NULL, contenu VARCHAR(255) NOT NULL, INDEX IDX_5FB6DEC77EE5403C (administrateur_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -35,6 +37,7 @@ final class Version20250211215944 extends AbstractMigration
         $this->addSql('ALTER TABLE activite_patient ADD CONSTRAINT FK_507C106E6B899279 FOREIGN KEY (patient_id) REFERENCES patient (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE exercice_patient ADD CONSTRAINT FK_E761A14689D40298 FOREIGN KEY (exercice_id) REFERENCES exercice (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE exercice_patient ADD CONSTRAINT FK_E761A1466B899279 FOREIGN KEY (patient_id) REFERENCES patient (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE ligne_commande ADD CONSTRAINT FK_3170B74B82EA2E54 FOREIGN KEY (commande_id) REFERENCES commande (id)');
         $this->addSql('ALTER TABLE question ADD CONSTRAINT FK_B6F7494E6B899279 FOREIGN KEY (patient_id) REFERENCES patient (id)');
         $this->addSql('ALTER TABLE reponse ADD CONSTRAINT FK_5FB6DEC77EE5403C FOREIGN KEY (administrateur_id) REFERENCES administrateur (id)');
         $this->addSql('ALTER TABLE reset_password_request ADD CONSTRAINT FK_7CE748AA76ED395 FOREIGN KEY (user_id) REFERENCES `user` (id)');
@@ -47,14 +50,17 @@ final class Version20250211215944 extends AbstractMigration
         $this->addSql('ALTER TABLE activite_patient DROP FOREIGN KEY FK_507C106E6B899279');
         $this->addSql('ALTER TABLE exercice_patient DROP FOREIGN KEY FK_E761A14689D40298');
         $this->addSql('ALTER TABLE exercice_patient DROP FOREIGN KEY FK_E761A1466B899279');
+        $this->addSql('ALTER TABLE ligne_commande DROP FOREIGN KEY FK_3170B74B82EA2E54');
         $this->addSql('ALTER TABLE question DROP FOREIGN KEY FK_B6F7494E6B899279');
         $this->addSql('ALTER TABLE reponse DROP FOREIGN KEY FK_5FB6DEC77EE5403C');
         $this->addSql('ALTER TABLE reset_password_request DROP FOREIGN KEY FK_7CE748AA76ED395');
         $this->addSql('DROP TABLE activite');
         $this->addSql('DROP TABLE activite_patient');
         $this->addSql('DROP TABLE administrateur');
+        $this->addSql('DROP TABLE commande');
         $this->addSql('DROP TABLE exercice');
         $this->addSql('DROP TABLE exercice_patient');
+        $this->addSql('DROP TABLE ligne_commande');
         $this->addSql('DROP TABLE patient');
         $this->addSql('DROP TABLE question');
         $this->addSql('DROP TABLE reponse');
